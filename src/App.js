@@ -1,4 +1,5 @@
 import "./App.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Routes } from "react-router-dom";
 import Layout from "./MainLayouts/Layout";
 import Profile from "./Component/Profile";
@@ -10,8 +11,9 @@ function App() {
     <div>
       <Layout>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/subscription" element={<Subscription />} />
+        <Route path="/" element={< Subscription/>} />
+          <Route path="/subscription" element={< Subscription/>} />
+          <Route path="/login" element={<Login/>} />
           <Route path="/profile" element={<Profile />} />
           </Routes>
       </Layout>

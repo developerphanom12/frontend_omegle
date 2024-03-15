@@ -4,10 +4,24 @@ const initialState = {
   role: "",
   appDetails: {},
   isLoading: false,
+  modalIsOpen: false,
+  modalType: null,
 
 };
 const UserReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "OPEN_MODAL":
+      return {
+        ...state,
+        modalIsOpen: true,
+        modalType: action.payload.modalType,
+      };
+    case "CLOSE_MODAL":
+      return {
+        ...state,
+        modalIsOpen: false,
+        modalType: null,
+      };
     case "USER_DATA":
       return {
         ...state,
