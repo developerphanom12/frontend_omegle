@@ -299,6 +299,10 @@ const Root = styled.section`
                   } */
                 }
               }
+              .custom_checkbox_tag input[type="checkbox"]:checked + label {
+                background-color:#00b2a2;
+                color: #ffffff;
+              }
             }
           }
           .payment_frequency {

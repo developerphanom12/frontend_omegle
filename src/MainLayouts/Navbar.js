@@ -64,8 +64,10 @@ export default function Navbars(){
   )
 }
 const Root = styled.section`
-.nav-menu {
+.nav-menu{
    background:#eaf9f5 !important;
+   font-family:"Montserrat";
+   font-weight:600;
    /* .open_page {
        z-index: 1000;
        position: fixed;
