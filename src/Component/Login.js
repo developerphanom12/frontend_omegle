@@ -1,18 +1,48 @@
 import React from "react";
 import axios from "axios";
 import styled from "styled-components";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
 
-  const handleSubmit = (e)=>{
-    e.preventDefault();
-    axios.post("https://jsonplaceholder.typicode.com/users")
-    .then((response)=>{
-        console.log(response)
-    })
-}
+  const handleGoogleLoginSuccess = async (response) => {
+    const accessToken = response?.credential;
+
+    const decodedToken = jwtDecode(accessToken);
+    console.log("DecodedToken:", decodedToken);
+
+    const userEmail = decodedToken.email;
+    const userName = decodedToken.name;
+    const sub = decodedToken.sub
+    console.log("UserEmail:", userEmail);
+    console.log("UserName:", userName);
+    
+    try {
+      const postData = { google_id: sub , name : userName};
+      const apiUrl = 'http://localhost:4100/api/user/register'; 
+      const apiResponse = await axios.post(apiUrl, postData);
+      console.log("API Response:", apiResponse.data);
+    } catch (error) {
+      console.error('Error posting data to API:', error);
+    }
+  };
+
+  const handleLoginFailure = (error) => {
+    console.error('Google login failed:', error);
+  };
+
+//   const handleSubmit = (e)=>{
+//     e.preventDefault();
+//     axios.post("")
+//     .then((response)=>{
+//         console.log(response)
+//     })
+// }
   return (
     <Root>
+  <GoogleOAuthProvider clientId="960417137626-hkv8qsscs9h35d9j6lm5tsco6cjff607.apps.googleusercontent.com">
+
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-12">
@@ -22,13 +52,19 @@ const Login = () => {
                 <hr className="divider" />
               </div>
               <div className="btn_div">
-                <button onClick={handleSubmit}>Login with Google</button>
+              <GoogleLogin
+          onFailure={handleLoginFailure}
+          onSuccess={handleGoogleLoginSuccess}
+        />
+                {/* <button>Login with Google</button> */}
               </div>
             </div>
           </div>
         </div>
       </div>
+      </GoogleOAuthProvider>
     </Root>
+ 
   );
 };
 export default Login;
