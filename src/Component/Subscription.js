@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-calendar/dist/Calendar.css";
 import omg from "../Component/Images/omg.png";
+import { toast } from 'react-toastify'; 
+import axios from "axios";
 
 const Subscription = () => {
+  const [data, setData] = useState({
+    subscriptionId: "1",
+    selectedDaysWithTime: [{ day: "2024-04-15", minutes: "10" }],
+  });
   const [count, setCount] = useState(0);
   const increment = () => {
     if (count < 30) {
@@ -15,6 +22,31 @@ const Subscription = () => {
       setCount(count - 1);
     }
   };
+
+  const subscribeApi = async () => {
+    try {
+      const axiosConfig = {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      };
+      const res = await axios.post(
+        `http://localhost:4200/api/admin/subscriptionss`,
+        data,
+        axiosConfig
+      );
+      console.log("id", data);
+      if (res?.status === 200) {
+        toast.success("Done");
+      }
+    } catch (err) {
+      toast.error("error");
+    }
+  };
+  const handleSubmit = () => {
+    subscribeApi();
+  };
+
   return (
     <Root>
       <div className="container-fluid">
@@ -45,8 +77,11 @@ const Subscription = () => {
                 <h4>$/-</h4>
               </div>
             </div>
-
-            <div className="profile_detail">
+            {/* {data.selectedDaysWithTime.map((item, index) => ( */}
+            <div
+              className="profile_detail"
+              // key={index}
+            >
               <div className="days_quantity">
                 <span className="text">Number of Days</span>
                 <span className="quantity-wrap">
@@ -65,7 +100,7 @@ const Subscription = () => {
                   <div className="delivery_day">
                     <h4>Select the days</h4>
                     <div className="checkbox_group_wrapper">
-                      <div className="custom_checkbox_tag">
+                      {/* <div className="custom_checkbox_tag">
                         <input
                           type="checkbox"
                           name="delivery-day"
@@ -130,7 +165,8 @@ const Subscription = () => {
                           class="delivery--days"
                         ></input>
                         <label for="Mon">Sat</label>
-                      </div>
+                      </div> */}
+                      <input type="date" />
                     </div>
                   </div>
                   <div className="payment_frequency">
@@ -138,22 +174,23 @@ const Subscription = () => {
                     <div className="select_month">
                       <select className="select_month_option">
                         <option value="1">Select Month</option>
-                        <option value="1">1 Month</option>
-                        <option value="3">3 Months</option>
-                        <option value="6">6 Months</option>
-                        <option value="12">12 Months</option>
+                        <option value="1">30 Days</option>
+                        <option value="3">60 Days</option>
+                        <option value="6">90 Days</option>
+                        <option value="12">120 Days</option>
                       </select>
                     </div>
                   </div>
                 </div>
               </div>
-
               <p className="price_differ">Prices may differ as per month.</p>
-
               <div className="button_div">
-                <button className="first_btn">Subscribe</button>
+                <button className="first_btn" onClick={handleSubmit}>
+                  Subscribe
+                </button>
               </div>
             </div>
+            {/* ))} */}
           </div>
         </div>
       </div>
@@ -300,7 +337,7 @@ const Root = styled.section`
                 }
               }
               .custom_checkbox_tag input[type="checkbox"]:checked + label {
-                background-color:#00b2a2;
+                background-color: #00b2a2;
                 color: #ffffff;
               }
             }
