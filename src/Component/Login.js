@@ -12,7 +12,7 @@ const Login = () => {
     const decodedToken = jwtDecode(accessToken);
     console.log("DecodedToken:", decodedToken);
 
-    const userEmail = decodedToken.email;
+    const userEmail = decodedToken.email;    
     const userName = decodedToken.name;
     const sub = decodedToken.sub
     console.log("UserEmail:", userEmail);
